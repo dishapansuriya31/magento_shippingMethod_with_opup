@@ -1,0 +1,36 @@
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <columns name="sales_order_columns">
+        <column name="shipping_type" class="Kitchen\Ordertsk\Ui\Component\Listing\Column\Mycolumn">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">shipping type</item>
+                </item>
+            </argument>
+        </column>
+        <column name="residential" class="Kitchen\Ordertsk\Ui\Component\Listing\Column\Mycolumn">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">residential</item>
+                </item>
+            </argument>
+        </column>
+        <column name="liftgate" class="Kitchen\Ordertsk\Ui\Component\Listing\Column\Mycolumn">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">liftgate</item>
+                </item>
+            </argument>
+        </column>
+        <column name="delivery_appointment" class="Kitchen\Ordertsk\Ui\Component\Listing\Column\Mycolumn">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">delivery appointment</item>
+                </item>
+            </argument>
+        </column>
+    </columns>
+</listing>

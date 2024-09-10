@@ -1,0 +1,168 @@
+<div style="display: none;" id='modal-html'>
+    <input type="radio" name="shipping_method" id="shipping" value="Shipping">Shipping <br>
+    <input type="radio" name="shipping_method" id="pickup" value="Pickup">Pickup <br>
+    <input type="radio" name="shipping_method" id="dealer_arrange" value="Dealer">Dealer Arrange Shipping <br>
+</div>
+<div style="display: none;" id='modal-html-active'>
+    <p>You have an active quote</p>
+</div>
+
+<button id="modal-event" class="action primary">New Order</button>
+<button id="edit-event" class="action primary">Edit</button>
+
+<script>
+  require([
+    'jquery',
+    'Magento_Ui/js/modal/modal',
+    'mage/storage'
+], function(
+    $,
+    modal,
+    storage
+) {
+    $(document).ready(function() {
+        var deOrderModal;
+        var atOrderModal;
+
+        var deOrder = {
+            type: 'popup',
+            responsive: true,
+            innerScroll: true,
+            buttons: [{
+                text: $.mage.__('Save & Continue'),
+                class: 'continueBtn',
+                click: function () {
+                    var selectedOption = $('input[name="shipping_method"]:checked').val();
+                    if (selectedOption) {
+                        storage.post(
+                            'order/index/saveshippingtype',
+                            JSON.stringify({
+                                "field":'Ship Type',
+                                "value":selectedOption
+                            }),
+                            true
+                        ).done(function(response) {
+                            alert('Success');
+                            deOrderModal.modal("closeModal"); // Close the modal after saving
+                        }).fail(function(response) {
+                            alert('Save Error occurred.');
+                        });
+                    } else {
+                        alert('Please select an option.');
+                    }
+                }
+            }]
+        };
+
+        var atOrder = {
+            type: 'popup',
+            responsive: true,
+            innerScroll: true,
+            buttons: [{
+                text: $.mage.__('Delete Quote'),
+                class: 'continueBtn',
+                click: function() {
+                    storage.get(
+                        'order/index/deleteQuoteAndcreateNew',
+                        '',
+                        true
+                    ).done(function(response) {
+                        alert('Quote deleted successfully.');
+                        atOrderModal.modal("closeModal");
+                        deOrderModal.modal("openModal");
+                    }).fail(function(response) {
+                        alert('Delete Error occurred.');
+                    });
+                }
+            },
+            {
+                text: $.mage.__('Close Popup'),
+                class: 'continueBtn',
+                click: function() {
+                    atOrderModal.modal("closeModal");
+                }
+            }]
+        };
+
+       
+            var editOrder = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: true,
+                buttons: [{
+                    text: $.mage.__('Confirm'),
+                    class: 'editBtn',
+                    click: function () {
+                        var editOption = $('input[name="shipping_method"]:checked').val();
+                        if (editOption) {
+                        storage.post(
+                            'order/index/saveshippingtype',
+                            JSON.stringify({
+                                "field":'Ship Type',
+                                "value":editOption
+                            }),
+                            true
+                        ).done(function(response) {
+                            // alert('Success edit');
+                            $('#modal-html').modal("closeModal");
+                        }).fail(function(response) {
+                            // alert('edit Error occurred.');
+                        });
+                        } else {
+                            alert('Please select an option.');
+                        }
+                    }
+                }]
+            };
+
+            $("#edit-event").click(function() {
+                storage.get(
+                    'order/index/editquote',
+                    '',
+                    true
+                    // return response controller file
+                ).done(function(response) {
+                    if (response.editOption !== undefined) {
+                        $('input[name="shipping_method"][value="' + response.editOption + '"]').prop('checked', true);
+                        $('#modal-html').modal(editOrder).modal("openModal");
+ 
+                    }
+                }).fail(function(response) {
+                    // alert('modal-edit Error occurred.');
+                });
+            });
+
+        // Event listener for the "New Order" button click
+        $("#modal-event").click(function() {
+            storage.get(
+                'order/index/checkquote',
+                '',
+                true
+            ).done(function(response) {
+                if (response.isActive == 0) {
+                    deOrderModal = $('#modal-html').modal(deOrder);
+                    deOrderModal.modal("openModal");
+                } else if (response.isActive == 1) {
+                    atOrderModal = $('#modal-html-active').modal(atOrder);
+                    atOrderModal.modal("openModal");
+                } else {
+                    alert('An error occurred.');
+                }
+            }).fail(function(response) {
+                alert('An error occurred.');
+            });
+        });
+
+        if(window.checkoutConfig.shipping_type == null)
+            {                       
+                // $('#modal-html').modal(deOrder).modal("openModal");
+                deOrderModal = $('#modal-html').modal(deOrder);
+                deOrderModal.modal("openModal");
+            
+            }    
+
+
+            
+    });
+});
+</script>

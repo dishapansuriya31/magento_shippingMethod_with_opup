@@ -1,0 +1,12 @@
+<td class="col shipping-type" data-th="<?= __('Shipping Type') ?>">
+    <?= $block->escapeHtml($this->getOrder()->getShippingType()) ?>
+</td>
+<td class="col residential" data-th="<?= __('Residential') ?>">
+    <?= $block->escapeHtml($this->getOrder()->getResidential()) ?>
+</td>
+<td class="col liftgate" data-th="<?= __('Liftgate') ?>">
+    <?= $block->escapeHtml($this->getOrder()->getLiftgate()) ?>
+</td>
+<td class="col delivery-appointment" data-th="<?= __('Delivery Appointment') ?>">
+    <?= $block->escapeHtml($this->getOrder()->getDeliveryAppointment()) ?>
+</td>
